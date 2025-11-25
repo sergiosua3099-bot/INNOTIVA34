@@ -1,34 +1,24 @@
 // server.js
-// Entry point for Innotiva backend using Replicate SDXL
-
 require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
-
-const experienciaRoutes = require("./src/routes/experienciaRoutes");
-const productsRoutes = require("./src/routes/productsRoutes");
+const path = require("path");
 
 const app = express();
-const port = process.env.PORT || 10000;
-
-// Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Healthcheck
-app.get("/", (req, res) => {
-  res.send("Innotiva Backend con Replicate SDXL (modelo B) funcionando ✅");
-});
+// RUTA CORRECTA (ARREGLADO)
+const apiRoutes = require("./src/routes/api");
+app.use("/experiencia", apiRoutes);
 
-// Routes
-app.use("/experiencia-premium", experienciaRoutes);
-app.use("/productos-shopify", productsRoutes);
+// SERVIR FRONTEND SI LO NECESITAS
+app.use(express.static(path.join(__dirname, "public")));
 
-// Start server
-app.listen(port, () => {
-  console.log(
-    `Servidor Innotiva con Replicate SDXL (B) escuchando en puerto ${port}`
-  );
+// PUERTO
+const PORT = process.env.PORT || 10000;
+
+app.listen(PORT, () => {
+  console.log(`Servidor INNOTIVA escuchando en puerto ${PORT}`);
 });
